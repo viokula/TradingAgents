@@ -88,7 +88,7 @@ A full 4-analyst run takes roughly 10 minutes on a reasoning model and produces 
 Behavior that looks like breakage but is by design — do not "fix" these:
 
 - **`Optional macro_data unavailable … FRED_API_KEY not set`** and **Reddit `HTTP 429` with backoff** are the vendor layer degrading gracefully. Agents report the data as unavailable instead of fabricating it; the run continues.
-- **`Portfolio Manager: structured-output invocation failed … retrying once as free text`** fires on every DeepSeek run observed so far. The free-text retry succeeds and the run completes, so it is a provider schema-compatibility weakness, not a graph bug. Worth checking against other providers before changing the structured-output path.
+- **`Portfolio Manager: structured-output invocation failed … retrying once as free text`** fires on every DeepSeek run observed so far. The free-text retry succeeds and the run completes, so it is a provider schema-compatibility weakness, not a graph bug. To investigate cheaply, run `scripts/smoke_structured_output.py <provider>` — it exercises the three structured-output agents (Research/Trader/Portfolio) directly against a real LLM without a full `propagate()`, so you can compare providers before touching the structured-output path.
 - Differing decisions across runs are expected. Changing the *analyst selection* moved a NVDA run from `Underweight` to `Overweight`, while a 10-day date shift left an AAPL verdict unchanged at `Hold` — analyst breadth shifts conclusions far more than modest data drift.
 
 ## Conventions
